@@ -119,7 +119,7 @@ class u0x32 {
 
     // ---- Scalar arithmetic (u0x32 × raw integer → u0x32) ------------------
 
-    FASTLED_FORCE_INLINE u0x32 operator*(u32 scalar) const {
+    constexpr FASTLED_FORCE_INLINE u0x32 operator*(u32 scalar) const {
         // UQ32 * scalar with saturation to prevent overflow
         u64 result = static_cast<u64>(mValue) * scalar;
         if (result > 0xFFFFFFFFULL) return from_raw(0xFFFFFFFFU);

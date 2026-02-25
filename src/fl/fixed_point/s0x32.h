@@ -116,7 +116,7 @@ class s0x32 {
 
     // ---- Scalar arithmetic (s0x32 × raw integer → s0x32) ------------------
 
-    FASTLED_FORCE_INLINE s0x32 operator*(i32 scalar) const {
+    constexpr FASTLED_FORCE_INLINE s0x32 operator*(i32 scalar) const {
         // Q31 * scalar with clamping to prevent overflow
         i64 result = static_cast<i64>(mValue) * scalar;
         if (result > 0x7FFFFFFFLL) return from_raw(0x7FFFFFFF);
