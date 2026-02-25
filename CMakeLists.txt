@@ -48,7 +48,7 @@ idf_component_register(
 # FastLED's platform routing still keys on ESP32 + F_CPU macros in several headers.
 target_compile_definitions(${COMPONENT_LIB} PUBLIC
     ESP32=1
-    F_CPU=(CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ*1000000UL)
+    "F_CPU=CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ*1000000UL"
 )
 
 idf_build_get_property(FASTLED_IDF_TARGET IDF_TARGET)
