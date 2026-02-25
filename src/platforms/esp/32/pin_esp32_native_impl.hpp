@@ -135,7 +135,11 @@ inline u16 analogRead(int pin) {
 
     // Configure channel (simplified - assumes ADC1 channel 0)
     adc_oneshot_chan_cfg_t config = {
+        #if defined(ADC_ATTEN_DB_12)
         .atten = ADC_ATTEN_DB_12,
+        #else
+        .atten = ADC_ATTEN_DB_11,
+        #endif
         .bitwidth = ADC_BITWIDTH_12,
     };
 
@@ -286,35 +290,22 @@ inline int setPwmFrequencyNative(int pin, u32 frequency_hz) {
 
     LedcPinAlloc& alloc = g_ledc_alloc[slot];
 
-    // Determine the best duty resolution for the requested frequency.
-    // LEDC supports 1-20 bit resolution depending on the clock and frequency.
-#if ESP_IDF_VERSION_5_OR_HIGHER
-    // ESP-IDF v5+ provides a helper to find the best resolution
-    // For ESP32 with LEDC_AUTO_CLK, typical source clock is 80MHz APB clock
+    // Determine duty resolution from source clock and requested frequency.
+    // Use a conservative calculation compatible across IDF 4.x/5.x.
     const u32 ledc_src_clk_hz = 80000000;  // 80MHz APB clock
-    u32 resolution = ledc_find_suitable_duty_resolution(
-        ledc_src_clk_hz, static_cast<u32>(frequency_hz));
-    if (resolution == 0) {
-        return -3;  // Could not find a suitable resolution
-    }
-#else
-    // ESP-IDF v4.x: calculate manually.
-    // resolution = floor(log2(APB_CLK_FREQ / frequency))
-    // APB_CLK_FREQ is typically 80 MHz.
-    u32 ratio = APB_CLK_FREQ / frequency_hz;
+    u32 ratio = ledc_src_clk_hz / frequency_hz;
     u32 resolution = 0;
     while (ratio > 1) {
         ratio >>= 1;
         resolution++;
     }
-    // Clamp resolution to valid range [1, 16] for v4.x
+    // Clamp resolution to a practical range supported across ESP32 targets.
     if (resolution < 1) {
         resolution = 1;
     }
     if (resolution > 16) {
         resolution = 16;
     }
-#endif
 
     // Configure the LEDC timer
     ledc_timer_config_t timer_cfg = {};

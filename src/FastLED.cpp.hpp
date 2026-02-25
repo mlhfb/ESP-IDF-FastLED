@@ -367,7 +367,9 @@ void CFastLED::delay(unsigned long ms) {
 		fl::delay(1);
 #endif
 		show();
+#ifdef FASTLED_NEEDS_YIELD
 		yield();
+#endif
 	}
 	while((fl::millis()-start) < ms);
 }
