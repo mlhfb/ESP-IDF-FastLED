@@ -1,6 +1,4 @@
-#include "platforms/is_platform.h"
-
-#ifdef FL_IS_ESP32
+#if defined(ESP_PLATFORM)
 
 #include "fl/int.h"
 
@@ -52,4 +50,4 @@ void initChannelDrivers() {
 }  // namespace platforms
 }  // namespace fl
 
-#endif  // FL_IS_ESP32
+#endif  // ESP_PLATFORM
