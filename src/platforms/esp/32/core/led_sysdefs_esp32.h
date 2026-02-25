@@ -17,6 +17,10 @@
 #define FASTLED_XTENSA
 #endif
 
+#ifndef F_CPU
+#define F_CPU (CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ * 1000000UL)
+#endif
+
 // Handling for older versions of ESP32 Arduino core
 #if !defined(ESP_IDF_VERSION)
 // Older versions of ESP_IDF only supported ESP32

@@ -50,7 +50,12 @@
 #include "platforms/arm/rp/rp2040/led_sysdefs_arm_rp2040.h"  // ok platform headers
 #elif defined(ESP8266)
 #include "platforms/esp/8266/led_sysdefs_esp8266.h"  // ok platform headers
-#elif defined(ESP32)
+#elif defined(ESP32) || defined(ARDUINO_ARCH_ESP32) || \
+      defined(CONFIG_IDF_TARGET_ESP32) || defined(CONFIG_IDF_TARGET_ESP32S2) || \
+      defined(CONFIG_IDF_TARGET_ESP32S3) || defined(CONFIG_IDF_TARGET_ESP32C2) || \
+      defined(CONFIG_IDF_TARGET_ESP32C3) || defined(CONFIG_IDF_TARGET_ESP32C5) || \
+      defined(CONFIG_IDF_TARGET_ESP32C6) || defined(CONFIG_IDF_TARGET_ESP32H2) || \
+      defined(CONFIG_IDF_TARGET_ESP32P4)
 #include "platforms/esp/32/core/led_sysdefs_esp32.h"  // ok platform headers
 #elif defined(__AVR__) || defined(__AVR_ATmega4809__)
 // AVR platforms

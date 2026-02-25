@@ -10,6 +10,7 @@
 #include "platforms/esp/esp_version.h"
 #include "fl/fastpin.h"
 #include "fl/compiler_control.h"
+#include "soc/gpio_reg.h"  // GPIO_OUT_REG, GPIO_OUT_W1TS_REG, GPIO_OUT_W1TC_REG
 
 FL_DISABLE_WARNING_PUSH
 FL_DISABLE_WARNING_DEPRECATED_REGISTER

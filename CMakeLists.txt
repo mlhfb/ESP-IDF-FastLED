@@ -45,31 +45,4 @@ idf_component_register(
     PRIV_REQUIRES ${FASTLED_PRIV_REQUIRES}
 )
 
-# FastLED's platform routing still keys on ESP32 + F_CPU macros in several headers.
-target_compile_definitions(${COMPONENT_LIB} PUBLIC
-    ESP32=1
-    "F_CPU=CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ*1000000UL"
-)
-
-idf_build_get_property(FASTLED_IDF_TARGET IDF_TARGET)
-if(FASTLED_IDF_TARGET STREQUAL "esp32")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32s2")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32S2=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32s3")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32S3=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32c2")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32C2=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32c3")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32C3=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32c5")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32C5=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32c6")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32C6=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32h2")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32H2=1)
-elseif(FASTLED_IDF_TARGET STREQUAL "esp32p4")
-    target_compile_definitions(${COMPONENT_LIB} PUBLIC ESP32P4=1)
-endif()
-
 target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_17)
