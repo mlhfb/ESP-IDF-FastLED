@@ -88,9 +88,8 @@
     #define FL_DISABLE_WARNING_VOLATILE
   #else
     #define FL_DISABLE_WARNING_VOLATILE FL_DISABLE_WARNING(volatile)
-  #define FL_DISABLE_WARNING_DEPRECATED_DECLARATIONS FL_DISABLE_WARNING(deprecated-declarations)
-  #define FL_DISABLE_WARNING_DEPRECATED_REGISTER FL_DISABLE_WARNING(deprecated-register)
   #endif
+  #define FL_DISABLE_WARNING_DEPRECATED_DECLARATIONS FL_DISABLE_WARNING(deprecated-declarations)
   // GCC has subobject-linkage warning (requires GCC >= 5.0)
   #if FL_GCC_VERSION >= 500
     #define FL_DISABLE_WARNING_SUBOBJECT_LINKAGE FL_DISABLE_WARNING(subobject-linkage)
@@ -120,9 +119,6 @@
   #define FL_DISABLE_WARNING_SHORTEN_64_TO_32
   #define FL_DISABLE_WARNING_VOLATILE
   #define FL_DISABLE_WARNING_DEPRECATED_DECLARATIONS
-  #define FL_DISABLE_WARNING_DEPRECATED_DECLARATIONS FL_DISABLE_WARNING(deprecated-declarations)
-  #define FL_DISABLE_WARNING_DEPRECATED_REGISTER
-  #define FL_DISABLE_WARNING_DEPRECATED_REGISTER FL_DISABLE_WARNING(deprecated-register)
   // Other compilers don't have subobject-linkage warning, use no-op
   #define FL_DISABLE_WARNING_SUBOBJECT_LINKAGE
   // Other compilers don't have C++14/17 extension warnings, use no-op
@@ -738,4 +734,3 @@ FL_DISABLE_WARNING_POP
 #ifndef FL_HAS_SANITIZER_LSAN
 #  define FL_HAS_SANITIZER_LSAN 0
 #endif
-

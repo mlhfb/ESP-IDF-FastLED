@@ -14,7 +14,7 @@ if(FASTLED_SRCS STREQUAL "")
     message(FATAL_ERROR "ESP-IDF-FastLED: no source files found in src/")
 endif()
 
-set(FASTLED_REQUIRES freertos esp_timer)
+set(FASTLED_REQUIRES freertos esp_timer driver)
 set(FASTLED_PRIV_REQUIRES)
 
 idf_build_get_property(FASTLED_ALL_COMPONENTS COMPONENTS)
@@ -46,3 +46,7 @@ idf_component_register(
 )
 
 target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_17)
+
+# ManCaveScroller (and similar ESP-IDF apps) compile with -Werror=all.
+# Keep FastLED warnings visible but do not promote them to hard failures.
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-error)

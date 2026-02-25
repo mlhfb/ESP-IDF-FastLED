@@ -8,14 +8,11 @@
 
 #if defined(FL_IS_ESP32)
   #include "platforms/esp/esp_version.h"
-  #if !defined(ESP_IDF_VERSION) || !ESP_IDF_VERSION_4_OR_HIGHER
-    // IDF 3.3 defines __int32_t and __uint32_t in system headers
-    // We must use these exact types to match system's uint32_t/int32_t typedefs
-    // Include minimal header that defines these internal types
-    // IWYU pragma: begin_keep
-    #include <sys/types.h>
-    // IWYU pragma: end_keep
-  #endif
+  // Pull in toolchain typedef internals (__int32_t, __uint32_t, etc.) so
+  // FastLED aliases can match newlib typedefs exactly.
+  // IWYU pragma: begin_keep
+  #include <sys/types.h>
+  // IWYU pragma: end_keep
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,14 +45,12 @@
 
 // Helper macro for 32-bit type selection based on IDF version
 #if defined(FL_IS_ESP32)
-  // esp_version.h already included above, use its definitions here
-  #if !defined(ESP_IDF_VERSION) || !ESP_IDF_VERSION_4_OR_HIGHER
-    // IDF 3.3: Use system __int32_t/__uint32_t types to match system's int32_t/uint32_t
+  // Prefer toolchain/newlib canonical typedef bases when available.
+  #if defined(__int32_t) && defined(__uint32_t)
     #define PLATFORM_INT32_CONDITIONAL_CHOOSE \
         typedef __int32_t i32; \
         typedef __uint32_t u32;
   #elif defined(__INT32_TYPE__) && defined(__UINT32_TYPE__)
-    // IDF 4.0+: Use compiler built-ins
     #define PLATFORM_INT32_CONDITIONAL_CHOOSE \
         typedef __INT32_TYPE__ i32; \
         typedef __UINT32_TYPE__ u32;
@@ -80,11 +75,19 @@
 // ============================================================================
 // These vary by ESP32 variant but use the same pattern:
 // All ESP32 variants are 32-bit with unsigned int for size/uptr
-#define DEFINE_ESP_POINTER_TYPES \
-    typedef unsigned int size;     /* matches __SIZE_TYPE__ */ \
-    typedef unsigned int uptr;     /* matches __uintptr_t */ \
-    typedef int iptr;              /* matches __intptr_t */ \
-    typedef int ptrdiff;           /* matches __PTRDIFF_TYPE__ */
+#if defined(__SIZE_TYPE__) && defined(__UINTPTR_TYPE__) && defined(__INTPTR_TYPE__) && defined(__PTRDIFF_TYPE__)
+  #define DEFINE_ESP_POINTER_TYPES \
+      typedef __SIZE_TYPE__ size; \
+      typedef __UINTPTR_TYPE__ uptr; \
+      typedef __INTPTR_TYPE__ iptr; \
+      typedef __PTRDIFF_TYPE__ ptrdiff;
+#else
+  #define DEFINE_ESP_POINTER_TYPES \
+      typedef unsigned int size; \
+      typedef unsigned int uptr; \
+      typedef int iptr; \
+      typedef int ptrdiff;
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // C++ LANGUAGE SUPPORT

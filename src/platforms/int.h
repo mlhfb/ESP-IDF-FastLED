@@ -6,10 +6,11 @@
 
 // ARM platform detection
 #include "platforms/arm/is_arm.h"
+#include "platforms/esp/is_esp.h"
 
-#if defined(ESP8266)
+#if defined(ESP8266) || defined(FL_IS_ESP8266)
     #include "platforms/esp/int_8266.h"
-#elif defined(ESP32)
+#elif defined(ESP32) || defined(FL_IS_ESP32)
     #include "platforms/esp/int.h"
 #elif defined(__AVR__)
     #include "platforms/avr/int.h"
