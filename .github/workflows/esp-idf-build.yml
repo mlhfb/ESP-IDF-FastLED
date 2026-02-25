@@ -1,0 +1,70 @@
+name: ESP-IDF Build
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  build:
+    name: IDF ${{ matrix.idf }} / ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        idf:
+          - release-v4.4
+          - release-v5.2
+        target:
+          - esp32
+          - esp32c3
+
+    container: espressif/idf:${{ matrix.idf }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show ESP-IDF version
+        run: idf.py --version
+
+      - name: Prepare smoke test app
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          APP_DIR="${RUNNER_TEMP}/fastled-smoke-${{ matrix.idf }}-${{ matrix.target }}"
+          cp -R "${IDF_PATH}/examples/get-started/hello_world" "${APP_DIR}"
+
+          mkdir -p "${APP_DIR}/components"
+          cp -R "${GITHUB_WORKSPACE}" "${APP_DIR}/components/esp-idf-fastled"
+          rm -rf "${APP_DIR}/components/esp-idf-fastled/.git"
+
+          cat > "${APP_DIR}/main/fastled_smoke.cpp" <<'EOF'
+          #include <FastLED.h>
+
+          constexpr int kNumLeds = 8;
+          CRGB leds[kNumLeds];
+
+          extern "C" void app_main(void) {
+              FastLED.addLeds<WS2812B, 2, GRB>(leds, kNumLeds);
+              FastLED.setBrightness(32);
+              fill_solid(leds, kNumLeds, CRGB::Black);
+              FastLED.show();
+          }
+          EOF
+
+          cat > "${APP_DIR}/main/CMakeLists.txt" <<'EOF'
+          idf_component_register(SRCS "fastled_smoke.cpp"
+                                 INCLUDE_DIRS ".")
+          EOF
+
+          echo "APP_DIR=${APP_DIR}" >> "${GITHUB_ENV}"
+
+      - name: Build component in sample app
+        shell: bash
+        run: |
+          set -euo pipefail
+          idf.py -C "${APP_DIR}" set-target "${{ matrix.target }}"
+          idf.py -C "${APP_DIR}" build

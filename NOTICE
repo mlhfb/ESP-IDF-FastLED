@@ -1,0 +1,8 @@
+This repository includes code from FastLED (https://github.com/FastLED/FastLED),
+licensed under the MIT License.
+
+Upstream snapshot used for this repository baseline:
+- commit: 5d7ce6f1fcd1cf3cccdc641636c66dd46ade44fc
+
+Copyright notices for FastLED remain with their respective files and project
+history.

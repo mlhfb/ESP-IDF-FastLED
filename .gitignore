@@ -1,0 +1,17 @@
+# Local scratch clones used during porting work
+_upstream_fastled/
+_ref_mancavescroller/
+
+# ESP-IDF / CMake build outputs
+build/
+sdkconfig
+sdkconfig.old
+sdkconfig.defaults.old
+managed_components/
+dependencies.lock
+
+# Editor/OS
+.vscode/
+.idea/
+Thumbs.db
+*.swp
