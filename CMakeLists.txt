@@ -17,6 +17,13 @@ endif()
 set(FASTLED_REQUIRES freertos esp_timer driver)
 set(FASTLED_PRIV_REQUIRES)
 
+set(FASTLED_IDF_COMPONENTS_DIR "")
+if(DEFINED IDF_PATH)
+    set(FASTLED_IDF_COMPONENTS_DIR "${IDF_PATH}/components")
+elseif(DEFINED ENV{IDF_PATH})
+    set(FASTLED_IDF_COMPONENTS_DIR "$ENV{IDF_PATH}/components")
+endif()
+
 foreach(COMP IN ITEMS
         driver
         esp_driver_gpio
@@ -34,7 +41,7 @@ foreach(COMP IN ITEMS
     # Use IDF component directory presence, not current build graph membership.
     # FastLED unity build includes optional ESP headers that need include paths
     # even if the app itself did not directly require those components.
-    if(EXISTS "$ENV{IDF_PATH}/components/${COMP}")
+    if(FASTLED_IDF_COMPONENTS_DIR AND EXISTS "${FASTLED_IDF_COMPONENTS_DIR}/${COMP}")
         list(APPEND FASTLED_PRIV_REQUIRES "${COMP}")
     endif()
 endforeach()
