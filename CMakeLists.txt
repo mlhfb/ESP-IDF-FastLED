@@ -6,13 +6,13 @@ endif()
 
 set(FASTLED_SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
 
-file(GLOB_RECURSE FASTLED_SRCS
-    "${FASTLED_SRC_DIR}/*.cpp"
+# Build the core FastLED unity units required for ESP-IDF LED output.
+# Exclude platform/third-party aggregate TUs that currently pull in
+# Arduino-only headers on ESP-IDF 5.1 toolchains.
+set(FASTLED_SRCS
+    "${FASTLED_SRC_DIR}/_build.cpp"
+    "${FASTLED_SRC_DIR}/fl/_build.cpp"
 )
-
-if(FASTLED_SRCS STREQUAL "")
-    message(FATAL_ERROR "ESP-IDF-FastLED: no source files found in src/")
-endif()
 
 set(FASTLED_REQUIRES freertos esp_timer driver)
 set(FASTLED_PRIV_REQUIRES)
