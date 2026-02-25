@@ -3,6 +3,5 @@ version: "3.10.4-idf.1"
 description: "FastLED packaged for native ESP-IDF (no Arduino framework required)"
 url: "https://github.com/mlhfb/ESP-IDF-FastLED"
 repository: "https://github.com/mlhfb/ESP-IDF-FastLED.git"
-license: "MIT"
 dependencies:
   idf: ">=4.4"
