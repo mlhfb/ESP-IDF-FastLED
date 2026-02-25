@@ -12,6 +12,7 @@ set(FASTLED_SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
 set(FASTLED_SRCS
     "${FASTLED_SRC_DIR}/_build.cpp"
     "${FASTLED_SRC_DIR}/fl/_build.cpp"
+    "${FASTLED_SRC_DIR}/platforms/esp/32/idf_compat.cpp"
 )
 
 set(FASTLED_REQUIRES freertos esp_timer driver)
